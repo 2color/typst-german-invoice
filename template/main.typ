@@ -23,6 +23,7 @@
     zip: "54321",
     city: "Potsdam",
     tax_nr: "12345/67890",
+    vat_id: "DE123456789",
     // optional signature, can be omitted
     signature: image("example_signature.png", width: 5em)
   ),

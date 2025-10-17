@@ -179,7 +179,10 @@
   ], qr-code(epc-qr-content, height: 4em))
 
   [
-    Steuernummer: #author.tax_nr
+    Steuernummer: #author.tax_nr \
+    #if "vat_id" in author [
+      USt - IdNr: #author.vat_id
+    ]
 
     #v(0.5em)
 

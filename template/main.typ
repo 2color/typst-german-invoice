@@ -1,4 +1,4 @@
-#import "@preview/classy-german-invoice:0.3.1": invoice
+#import "../lib.typ": invoice
 
 #show: invoice(
   // Invoice number
@@ -46,6 +46,7 @@
   ),
   // Umsatzsteuersatz (VAT)
   vat: 0.19,
-  kleinunternehmer: true,
+  kleinunternehmer: false,
+  includes-vat: true
 )
 

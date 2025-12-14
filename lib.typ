@@ -71,6 +71,9 @@
     #recipient.street \
     #recipient.zip
     #recipient.city
+    #if "vat_id" in recipient [
+      \ USt-IdNr: #recipient.vat_id
+    ]
   ]
 
   v(4em)

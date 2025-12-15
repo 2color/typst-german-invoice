@@ -38,7 +38,7 @@
 ) = {
   set text(lang: "de", region: "DE")
 
-  set page(paper: "a4", margin: (x: 20%, y: 20%, top: 20%, bottom: 20%))
+  set page(paper: "a4", margin: (x: 15%, y: 15%, top: 15%, bottom: 15%))
 
   // Typst can't format numbers yet, so we use this from here:
   // https://github.com/typst/typst/issues/180#issuecomment-1484069775
@@ -175,7 +175,7 @@
     )
   ]
 
-  v(2em)
+  v(1.5em)
 
   [
     #set text(size: 0.8em)
@@ -188,7 +188,7 @@
     ]
   ]
 
-  v(1em)
+  v(0.5em)
 
   // Bank details block (shared between EUR and non-EUR)
   let bank-details = [
@@ -216,19 +216,19 @@
     let epc-qr-content = (
       "BCD\n" + "002\n" + "1\n" + "SCT\n" + bank-account.bic + "\n" + bank-account.name + "\n" + bank-account.iban + "\n" + "EUR" + format_currency(qr-eur-amount, locale: "en") + "\n" + "\n" + invoice-nr + "\n" + "\n" + "\n"
     )
-    grid(columns: (1fr, 1fr), gutter: 1em, align: top, bank-details, qr-code(epc-qr-content, height: 4em))
+    grid(columns: (2fr, 2fr), gutter: 1em, align: top, bank-details, qr-code(epc-qr-content, height: 6em))
   } else {
     // No QR code
     bank-details
   }
 
-  [
+  block(breakable: false)[
     Steuernummer: #author.tax_nr \
     #if "vat_id" in author [
       USt - IdNr: #author.vat_id
     ]
 
-    #v(0.5em)
+    #v(0.3em)
 
     Mit freundlichen Grüßen
 

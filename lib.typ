@@ -33,6 +33,8 @@
   currency: "EUR",
   // FX rate to EUR per ECB rate (e.g., 0.93 means 1 USD = 0.93 EUR)
   fx-rate: none,
+  // Show QR code (for non-EUR invoices, requires fx-rate to calculate EUR amount)
+  show-qr: true,
 ) = {
   set text(lang: "de", region: "DE")
 
@@ -199,19 +201,24 @@
     IBAN: *#iban(bank-account.iban)* \
     BIC: #bank-account.bic
     #if currency != "EUR" and fx-rate != none [
-      \ Rechnungsbetrag in EUR: #format_currency(total * fx-rate)€ (ECB Kurs: #fx-rate)
+      \ Rechnungsbetrag in EUR: #format_currency(total * fx-rate)€ (ECB *#invoice-date.display("[day].[month repr:short]")* USD / EUR: #fx-rate)
     ]
   ]
 
-  if currency == "EUR" {
-    // EPC QR code only for EUR (SEPA standard)
+  // Determine EUR amount for QR code (SEPA standard requires EUR)
+  let qr-eur-amount = if currency == "EUR" { total }
+    else if fx-rate != none { total * fx-rate }
+    else { none }
+
+  if show-qr and qr-eur-amount != none {
+    // EPC QR code (SEPA standard, always in EUR)
     // https://en.wikipedia.org/wiki/EPC_QR_code version 002
     let epc-qr-content = (
-      "BCD\n" + "002\n" + "1\n" + "SCT\n" + bank-account.bic + "\n" + bank-account.name + "\n" + bank-account.iban + "\n" + "EUR" + format_currency(total, locale: "en") + "\n" + "\n" + invoice-nr + "\n" + "\n" + "\n"
+      "BCD\n" + "002\n" + "1\n" + "SCT\n" + bank-account.bic + "\n" + bank-account.name + "\n" + bank-account.iban + "\n" + "EUR" + format_currency(qr-eur-amount, locale: "en") + "\n" + "\n" + invoice-nr + "\n" + "\n" + "\n"
     )
     grid(columns: (1fr, 1fr), gutter: 1em, align: top, bank-details, qr-code(epc-qr-content, height: 4em))
   } else {
-    // No QR code for non-EUR currencies
+    // No QR code
     bank-details
   }
 
